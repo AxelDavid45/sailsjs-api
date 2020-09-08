@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Ride</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="ride">
+    <ion-item>
+      <ion-label>Title: </ion-label>
+      <ion-input [(ngModel)]="ride.title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Start date: </ion-label>
+      <ion-datetime [(ngModel)]="ride.start" display-format="D MMM YYYY H:mm"
+                    min="2020" max="2023"></ion-datetime>
+    </ion-item>
+  </ion-list>
+  <ion-button class="ion-activable" expand="block" (click)="save()" color="secondary">Save
+  </ion-button>
+</ion-content>
