@@ -21,7 +21,13 @@ export class RidesPage implements OnInit {
   }
 
   delete(id) {
-
+    this.rideService.delete(id).subscribe(data => {
+      alert('Ride deleted')
+      this.getRides()
+    }, error => {
+      alert('We could not delete the ride')
+      console.log(error)
+    })
   }
 
 }
