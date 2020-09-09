@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {DEFAULT_CREDENTIAL_OBJECT, Credential} from "../../models/credential";
 
 @Component({
   selector: 'app-folder',
@@ -7,12 +8,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./folder.page.scss'],
 })
 export class FolderPage implements OnInit {
-  public folder: string;
-
+  credential: Credential = DEFAULT_CREDENTIAL_OBJECT
   constructor(private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.folder = this.activatedRoute.snapshot.paramMap.get('id');
+  }
+
+  login() {
+    // TODO login or signup
   }
 
 }
