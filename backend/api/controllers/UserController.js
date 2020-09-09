@@ -1,6 +1,11 @@
 const joi = require('joi')
 const bcrypt = require('bcrypt')
+const AuthenticationService = require('../services/AuthenticationService')
 const SALT_ROUND = 10
+const schema = joi.object({
+  email: joi.string().required().email(),
+  password: joi.string().required(),
+})
 /**
  * UserController
  *
@@ -15,10 +20,6 @@ module.exports = {
    */
   signup: async function (req, res) {
     try {
-      const schema = joi.object({
-        email: joi.string().required().email(),
-        password: joi.string().required(),
-      })
       const { email, password } = await schema.validateAsync(req.allParams())
       const hashedPassword = await bcrypt.hash(password, SALT_ROUND)
       const user = await User.create({ email, password: hashedPassword }).fetch()
@@ -35,9 +36,23 @@ module.exports = {
    * `UserController.login()`
    */
   login: async function (req, res) {
-    return res.json({
-      todo: 'login() is not implemented yet!'
-    })
+    try {
+      const { email, password } = await schema.validateAsync(req.allParams())
+      const user = await User.findOne({ email })
+      if (user) {
+        const passwordValidation = await bcrypt.compare(password, user.password)
+        if (passwordValidation) {
+          const token = AuthenticationService.JWTIssuer({ user: user.id }, '1 day')
+          return res.ok({ token })
+        }
+      }
+      return res.notFound({ error: 'User not found' })
+    } catch (err) {
+      if (err.name === 'ValidationError') {
+        return res.badRequest({ err }).json()
+      }
+      return res.serverError({ err }).json()
+    }
   }
 
 }
