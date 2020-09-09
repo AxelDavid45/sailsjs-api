@@ -1,4 +1,6 @@
 const joi = require('joi')
+const bcrypt = require('bcrypt')
+const SALT_ROUND = 10
 /**
  * UserController
  *
@@ -17,13 +19,15 @@ module.exports = {
         email: joi.string().required().email(),
         password: joi.string().required(),
       })
-      const params = await schema.validateAsync(req.allParams())
-      return res.ok(params)
+      const { email, password } = await schema.validateAsync(req.allParams())
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUND)
+      const user = await User.create({ email, password: hashedPassword }).fetch()
+      return res.ok(user)
     } catch (err) {
       if (err.name === 'ValidationError') {
-        return res.badRequest({err}).json()
+        return res.badRequest({ err }).json()
       }
-      return res.serverError({err}).json()
+      return res.serverError({ err }).json()
     }
   },
 
