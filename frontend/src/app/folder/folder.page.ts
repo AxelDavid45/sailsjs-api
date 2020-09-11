@@ -10,6 +10,7 @@ import {NavController} from "@ionic/angular";
     styleUrls: ['./folder.page.scss'],
 })
 export class FolderPage implements OnInit {
+    isLoggingIn: Boolean = true
     credential: Credential = DEFAULT_CREDENTIAL_OBJECT
 
     constructor(private activatedRoute: ActivatedRoute, private authenticationService: AuthenticationService, private navController: NavController) {
@@ -18,8 +19,30 @@ export class FolderPage implements OnInit {
     ngOnInit() {
     }
 
+    public toggleLogin = () => {
+        this.isLoggingIn = !this.isLoggingIn
+    }
+
     login() {
-        this.doLogin()
+        if (this.isLoggingIn) {
+            this.doLogin()
+        } else {
+            if (this.credential.password !== this.credential.passwordConfirm) {
+                alert('Password does not match')
+                return
+            }
+
+            this.authenticationService.signup({
+                email: this.credential.email,
+                password: this.credential.password
+            }).subscribe((data: any) => {
+                console.log(data)
+                this.doLogin()
+            }, err => {
+                alert('There was an error in the sign up process')
+                console.log(err)
+            })
+        }
     }
 
     doLogin() {

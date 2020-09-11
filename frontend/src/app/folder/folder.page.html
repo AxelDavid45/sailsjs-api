@@ -17,12 +17,14 @@
       <ion-label>Password</ion-label>
       <ion-input [(ngModel)]="credential.password" type="password"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="!isLoggingIn">
       <ion-label>Confirm your password</ion-label>
       <ion-input [(ngModel)]="credential.passwordConfirm" type="password"></ion-input>
     </ion-item>
   </ion-list>
   <div class="ion-padding">
+    <p *ngIf="!isLoggingIn">Are you signed up? <a (click)="toggleLogin()">Click here</a></p>
+    <p *ngIf="isLoggingIn">Sign up <a (click)="toggleLogin()">Click here</a></p>
     <ion-button (click)="login()" class="ion-activable" expand="block">Login</ion-button>
   </div>
 </ion-content>
