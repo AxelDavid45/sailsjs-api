@@ -18,7 +18,25 @@
       <ion-datetime [(ngModel)]="ride.start" display-format="D MMM YYYY H:mm"
                     min="2020" max="2023"></ion-datetime>
     </ion-item>
+    <ion-item>
+      <ion-label>Add WayPoint: </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Example: NYC" [(ngModel)]="masterWayPoint" >
+      </ion-input>
+      <ion-button class="clear item-right" (click)="addWayPoint()">Add</ion-button>
+    </ion-item>
   </ion-list>
+  <ion-content id="waypoints-container">
+    <ion-list>
+      <ion-item *ngFor="let wayPoint of wayPoints">
+        <ion-label class="ion-text-wrap">
+          {{wayPoint}}
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>
   <ion-button class="ion-activable" expand="block" (click)="save()" color="secondary">Save
   </ion-button>
 </ion-content>

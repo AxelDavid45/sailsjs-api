@@ -15,8 +15,8 @@ module.exports = {
         end: params.end,
         wayPoints: params.wayPoints,
         user: req.user
-      })
-      return res.ok({data: 'ok'})
+      }).fetch()
+      return res.ok(ride)
     } catch (err) {
       return res.serverError({ err })
     }
